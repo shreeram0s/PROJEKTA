@@ -159,7 +159,8 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:5180",
     "http://127.0.0.1:5181",
     "http://127.0.0.1:5182",  # Add this line for the new frontend port
-    "https://profilematch-frontend.onrender.com"
+    "https://profilematch-frontend.onrender.com",
+    "https://projektafrontend.onrender.com"
 ]
 
 CORS_ALLOW_ALL_ORIGINS = False
