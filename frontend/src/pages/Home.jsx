@@ -125,7 +125,7 @@ const Home = () => {
 
     try {
       // Upload files
-      const uploadResponse = await axios.post('http://localhost:8000/api/upload/', formData, {
+      const uploadResponse = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/upload/`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -138,7 +138,7 @@ const Home = () => {
       await new Promise(resolve => setTimeout(resolve, 1500));
 
       // Analyze files
-      const analyzeResponse = await axios.post('http://localhost:8000/api/analyze/', {
+      const analyzeResponse = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/analyze/`, {
         analysis_id: uploadResponse.data.analysis_id
       });
 

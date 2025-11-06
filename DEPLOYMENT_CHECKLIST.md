@@ -1,127 +1,138 @@
 # ProFileMatch Deployment Checklist
 
-## Pre-deployment Checklist
+## Pre-Deployment Checklist
 
-### Backend
-- [ ] Update `settings.py` with production values
-- [ ] Set `DEBUG = False`
-- [ ] Configure `ALLOWED_HOSTS` properly
-- [ ] Set strong `SECRET_KEY`
-- [ ] Configure database connection
-- [ ] Remove any development-specific settings
-- [ ] Ensure all environment variables are properly configured
-- [ ] Run `python manage.py collectstatic` if serving static files
-- [ ] Test database migrations
+### Codebase Preparation
+- [x] Remove unnecessary files and directories (test resumes, etc.)
+- [x] Ensure all dependencies are listed in requirements.txt and package.json
+- [x] Verify all environment variables are properly configured
+- [x] Check that no sensitive information is hardcoded
+- [x] Ensure all components are properly imported (no undefined components)
+- [x] Verify CORS settings include all necessary origins
+- [x] Confirm database migrations are up to date
 
-### Frontend
-- [ ] Update API endpoints to point to production backend
-- [ ] Build production version with `npm run build`
-- [ ] Verify all environment variables are set
-- [ ] Test build locally before deployment
+### Environment Configuration
+- [x] Create .env files for both frontend and backend
+- [x] Update .gitignore to exclude .env files
+- [x] Verify environment variable usage in settings.py
+- [x] Confirm API keys are properly configured
+- [x] Check database connection settings
 
-### Security
-- [ ] Rotate all API keys and secrets
-- [ ] Ensure HTTPS is configured
-- [ ] Set proper CORS headers
-- [ ] Review and update permissions
+### Documentation
+- [x] Update README.md with environment setup instructions
+- [x] Create detailed deployment guide (DEPLOYMENT_SUMMARY.md)
+- [x] Ensure all configuration files have proper comments
+
+### Testing
+- [x] Test local development setup
+- [x] Verify frontend can communicate with backend
+- [x] Test all major application features
+- [x] Check PDF export functionality
+- [x] Verify job recommendations work
+- [x] Test interview preparation module
+- [x] Confirm all API endpoints are functional
 
 ## Deployment Steps
 
 ### Render Deployment
+1. [ ] Fork repository to GitHub
+2. [ ] Create Render Web Service for backend:
+   - [ ] Set Root Directory to `backend`
+   - [ ] Set Build Command: `pip install -r requirements.txt`
+   - [ ] Set Start Command: `python manage.py migrate && gunicorn profilematch.wsgi:application`
+   - [ ] Add all required environment variables
+3. [ ] Create Render Web Service for frontend:
+   - [ ] Set Root Directory to `frontend`
+   - [ ] Set Build Command: `npm install && npm run build`
+   - [ ] Set Publish Directory to `dist`
+   - [ ] Add VITE_API_URL environment variable
+4. [ ] Configure custom domains if needed
+5. [ ] Set up automatic deployments from GitHub
 
-1. **Backend Service**
-   - [ ] Create new Web Service
-   - [ ] Connect to GitHub repository
-   - [ ] Set build command: `pip install -r requirements.txt`
-   - [ ] Set start command: `python manage.py migrate && gunicorn profilematch.wsgi:application`
-   - [ ] Configure environment variables:
-     - `SECRET_KEY`
-     - `DEBUG` = False
-     - `ALLOWED_HOSTS`
-     - `DB_NAME`
-     - `DB_USER`
-     - `DB_PASSWORD`
-     - `DB_HOST`
-     - `DB_PORT`
-     - `YOUTUBE_API_KEY`
-     - `ADZUNA_APP_ID`
-     - `ADZUNA_APP_KEY`
-   - [ ] Deploy service
+### Manual Deployment
+1. [ ] Set up server environment (Ubuntu/Debian recommended)
+2. [ ] Install prerequisites (Python, Node.js, PostgreSQL)
+3. [ ] Configure database
+4. [ ] Deploy backend:
+   - [ ] Clone repository
+   - [ ] Create virtual environment
+   - [ ] Install Python dependencies
+   - [ ] Run migrations
+   - [ ] Collect static files
+   - [ ] Configure web server (nginx/Apache) to serve Django
+5. [ ] Deploy frontend:
+   - [ ] Clone repository
+   - [ ] Install Node.js dependencies
+   - [ ] Build production assets
+   - [ ] Configure web server to serve static files
+6. [ ] Configure SSL certificates
+7. [ ] Set up process monitoring (PM2, systemd, etc.)
 
-2. **Frontend Service**
-   - [ ] Create new Static Site
-   - [ ] Connect to same GitHub repository
-   - [ ] Set build command: `npm install && npm run build`
-   - [ ] Set publish directory: `dist`
-   - [ ] Configure environment variables if needed
-   - [ ] Deploy service
+## Post-Deployment Verification
 
-3. **Database**
-   - [ ] Create PostgreSQL database on Render
-   - [ ] Configure database connection in backend service
-   - [ ] Run initial migrations
-
-## Post-deployment Verification
-
-### Backend
-- [ ] Verify health check endpoint: `/api/health/`
-- [ ] Test file upload endpoint: `/api/upload/`
-- [ ] Test analysis endpoint: `/api/analyze/`
-- [ ] Test job recommendations: `/api/jobs/`
-- [ ] Test interview preparation: `/api/interview-kit/`
-- [ ] Test history endpoint: `/api/history/`
-- [ ] Test comparison endpoint: `/api/compare/`
-
-### Frontend
+### Functionality Tests
 - [ ] Verify homepage loads correctly
-- [ ] Test document upload functionality
-- [ ] Verify analysis results display properly
-- [ ] Test all navigation links
-- [ ] Verify PDF export functionality
-- [ ] Test job recommendations page
-- [ ] Test interview preparation page
-- [ ] Test history page
-- [ ] Test comparison page
+- [ ] Test document upload and analysis
+- [ ] Check dashboard visualizations
+- [ ] Verify job recommendations
+- [ ] Test interview preparation
+- [ ] Confirm PDF export works
+- [ ] Check all navigation links
 
-### Integration
-- [ ] Verify frontend can communicate with backend
-- [ ] Test YouTube API integration
-- [ ] Test Adzuna API integration
-- [ ] Verify database operations
-- [ ] Test file upload and processing
+### Performance Tests
+- [ ] Verify application loads within acceptable time
+- [ ] Test API response times
+- [ ] Check database query performance
+- [ ] Verify file upload limits
 
-## Monitoring and Maintenance
+### Security Checks
+- [ ] Confirm DEBUG is set to False
+- [ ] Verify SECRET_KEY is properly secured
+- [ ] Check database credentials are not exposed
+- [ ] Confirm API keys are not in client-side code
+- [ ] Verify CORS settings are restrictive
+- [ ] Check file permissions
 
-- [ ] Set up logging
-- [ ] Configure error tracking
-- [ ] Set up uptime monitoring
-- [ ] Schedule regular database backups
-- [ ] Monitor API usage limits
-- [ ] Plan for scaling if needed
+## Maintenance Schedule
 
-## Troubleshooting
+### Daily
+- [ ] Monitor application logs
+- [ ] Check server resource usage
+- [ ] Verify API services are responding
+
+### Weekly
+- [ ] Review application performance
+- [ ] Check for security updates
+- [ ] Verify database backups
+
+### Monthly
+- [ ] Update dependencies
+- [ ] Review API usage limits
+- [ ] Rotate API keys if needed
+- [ ] Test backup restoration
+
+## Troubleshooting Guide
 
 ### Common Issues
-1. **CORS errors**: Verify `CORS_ALLOWED_ORIGINS` settings
-2. **Database connection**: Check database credentials and network access
-3. **Static files not loading**: Ensure `STATIC_ROOT` and `STATIC_URL` are configured correctly
-4. **API key errors**: Verify all API keys are valid and properly configured
-5. **Memory issues**: Monitor resource usage and consider upgrading plan if needed
+1. **Application not starting**:
+   - Check environment variables
+   - Verify database connection
+   - Review server logs
 
-### Useful Commands
-```bash
-# Check backend health
-curl https://your-backend-url/api/health/
+2. **CORS errors**:
+   - Check CORS_ALLOWED_ORIGINS setting
+   - Verify frontend and backend domains match
 
-# Run migrations
-python manage.py migrate
+3. **Database connection issues**:
+   - Verify database credentials
+   - Check network connectivity
+   - Confirm database service is running
 
-# Collect static files
-python manage.py collectstatic
+4. **Missing components or imports**:
+   - Check that all dependencies are installed
+   - Verify component imports in React files
 
-# Check database connection
-python manage.py dbshell
-
-# View logs
-# Check Render dashboard logs
-```
+### Support Resources
+- [ ] Repository issues page
+- [ ] Documentation files
+- [ ] Contact information for development team

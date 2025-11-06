@@ -3,27 +3,31 @@ services:
     name: profilematch-backend
     env: python
     plan: free
-    buildCommand: "pip install -r requirements.txt"
-    startCommand: "python manage.py migrate && gunicorn profilematch.wsgi:application"
+    rootDir: backend
+    buildCommand: "pip install --upgrade pip && pip install -r requirements.txt && python manage.py collectstatic --noinput"
+    startCommand: "python manage.py migrate && gunicorn profilematch.wsgi:application --bind 0.0.0.0:$PORT"
     envVars:
-      - key: DATABASE_URL
-        fromDatabase:
-          name: profilematch-db
-          property: connectionString
       - key: SECRET_KEY
         generateValue: true
       - key: DEBUG
         value: "False"
       - key: ALLOWED_HOSTS
         value: "profilematch-backend.onrender.com"
+      - key: FRONTEND_ORIGIN
+        value: "https://profilematch-frontend.onrender.com"
+      # Provide DB_* and API keys via Render Dashboard
+      # DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT
+      # YOUTUBE_API_KEY, ADZUNA_APP_ID, ADZUNA_APP_KEY
 
   - type: web
     name: profilematch-frontend
     env: static
+    plan: free
+    rootDir: frontend
     buildCommand: "npm install && npm run build"
-    staticPublishPath: ./dist
+    staticPublishPath: dist
     envVars:
-      - key: REACT_APP_API_URL
+      - key: VITE_API_URL
         value: "https://profilematch-backend.onrender.com"
 
 databases:

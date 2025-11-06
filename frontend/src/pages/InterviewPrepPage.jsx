@@ -1,17 +1,23 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import axios from 'axios';
 import { 
   Users, 
+  Code, 
+  MessageCircle, 
   Lightbulb, 
-  Target, 
   FileText, 
-  Download,
   ArrowRight,
-  Brain,
-  MessageCircle,
-  Zap
+  Loader2,
+  TrendingUp,
+  Target,
+  Zap,
+  BookOpen,
+  Briefcase,
+  Clock,
+  Star,
+  CheckCircle
 } from 'lucide-react';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 const InterviewPrepPage = () => {
@@ -57,7 +63,7 @@ const InterviewPrepPage = () => {
     setError(null);
     
     try {
-      const response = await axios.post('http://localhost:8000/api/interview-kit/', {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/interview-kit/`, {
         skills: missingSkills
       });
       
@@ -130,12 +136,12 @@ const InterviewPrepPage = () => {
                   Generating Materials...
                 </>
               ) : (
-                <>
-                  <Brain className="h-4 w-4" />
-                  Refresh Interview Kit
-                </>
-              )}
-            </button>
+                  <>
+                    <Code className="h-4 w-4" />
+                    Refresh Interview Kit
+                  </>
+                )}
+              </button>
           </div>
         </div>
       </section>
@@ -171,7 +177,7 @@ const InterviewPrepPage = () => {
                       : 'bg-muted hover:bg-muted/80'
                   }`}
                 >
-                  <Brain className="h-4 w-4" />
+                  <Code className="h-4 w-4" />
                   Technical Questions
                 </button>
                 <button
@@ -217,7 +223,7 @@ const InterviewPrepPage = () => {
                   className="space-y-6"
                 >
                   <h2 className="text-3xl font-bold mb-6 flex items-center gap-3">
-                    <Brain className="h-8 w-8 text-primary" />
+                    <Code className="h-8 w-8 text-primary" />
                     Technical Questions
                   </h2>
                   
@@ -233,7 +239,7 @@ const InterviewPrepPage = () => {
                         >
                           <div className="flex items-start gap-4">
                             <div className="mt-1 text-primary">
-                              <Brain className="h-6 w-6" />
+                              <Code className="h-6 w-6" />
                             </div>
                             <div className="flex-1">
                               <h3 className="text-lg font-semibold mb-2">
@@ -268,7 +274,7 @@ const InterviewPrepPage = () => {
                       ))
                     ) : (
                       <div className="text-center py-12">
-                        <Brain className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                        <Code className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                         <h3 className="text-xl font-semibold mb-2">No Technical Questions Available</h3>
                         <p className="text-muted-foreground">
                           Try refreshing the interview kit or completing a new analysis.
@@ -511,10 +517,13 @@ const InterviewPrepPage = () => {
           <p className="text-blue-100 mb-8 text-lg">
             Save your personalized interview questions and preparation materials as a PDF
           </p>
-          <button className="inline-flex items-center gap-2 px-8 py-4 bg-white text-blue-600 font-medium rounded-full hover:bg-blue-50 transition-colors shadow-lg">
+          <Link 
+            to="/export" 
+            className="inline-flex items-center gap-2 px-8 py-4 bg-white text-blue-600 font-medium rounded-full hover:bg-blue-50 transition-colors shadow-lg"
+          >
             <FileText className="h-5 w-5" />
             Export as PDF
-          </button>
+          </Link>
         </div>
       </section>
     </div>

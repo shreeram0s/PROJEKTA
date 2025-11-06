@@ -17,7 +17,7 @@ const HistoryPage = () => {
   const fetchHistory = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:8000/api/history/');
+      const response = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/history/`);
       setAnalyses(response.data.history || []);
     } catch (error) {
       console.error('Error fetching history:', error);
@@ -39,7 +39,7 @@ const HistoryPage = () => {
 
   const viewDetails = async (analysisId) => {
     try {
-      const response = await axios.post('http://localhost:8000/api/analyze/', {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/analyze/`, {
         analysis_id: analysisId
       });
       setSelectedAnalysis(response.data);

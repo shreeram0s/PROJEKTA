@@ -37,7 +37,7 @@ const ComparePage = () => {
       formData1.append('resume', file1);
       formData1.append('jd', new Blob([mockJD], { type: 'text/plain' }), 'mock_jd1.txt');
       
-      const uploadResponse1 = await axios.post('http://localhost:8000/api/upload/', formData1, {
+      const uploadResponse1 = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/upload/`, formData1, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -48,18 +48,18 @@ const ComparePage = () => {
       formData2.append('resume', file2);
       formData2.append('jd', new Blob([mockJD], { type: 'text/plain' }), 'mock_jd2.txt');
       
-      const uploadResponse2 = await axios.post('http://localhost:8000/api/upload/', formData2, {
+      const uploadResponse2 = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/upload/`, formData2, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
       
       // Analyze both resumes
-      const analyzeResponse1 = await axios.post('http://localhost:8000/api/analyze/', {
+      const analyzeResponse1 = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/analyze/`, {
         analysis_id: uploadResponse1.data.analysis_id
       });
       
-      const analyzeResponse2 = await axios.post('http://localhost:8000/api/analyze/', {
+      const analyzeResponse2 = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/analyze/`, {
         analysis_id: uploadResponse2.data.analysis_id
       });
       

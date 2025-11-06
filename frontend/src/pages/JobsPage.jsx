@@ -143,7 +143,7 @@ const JobsPage = () => {
     setError(null);
     
     try {
-      const response = await axios.get('http://localhost:8000/api/jobs/', {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/jobs/`, {
         params: {
           skills: skills.join(',')
         }

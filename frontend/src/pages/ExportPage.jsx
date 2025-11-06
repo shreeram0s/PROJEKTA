@@ -5,8 +5,7 @@ import {
   Download, 
   CheckCircle, 
   ArrowRight,
-  Printer,
-  Share2
+  Printer
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import html2canvas from 'html2canvas';
@@ -298,10 +297,6 @@ const ExportPage = () => {
                 >
                   <Printer className="h-5 w-5" />
                   Print Report
-                </button>
-                <button className="flex items-center gap-2 px-6 py-3 bg-background border text-foreground rounded-lg hover:bg-muted transition-colors">
-                  <Share2 className="h-5 w-5" />
-                  Share Report
                 </button>
               </div>
             </div>

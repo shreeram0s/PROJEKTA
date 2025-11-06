@@ -1,131 +1,155 @@
-# ProFileMatch Deployment Summary
+# ProFileMatch Deployment Guide
 
-## Project Structure Organization
+## Overview
 
-The project has been organized with a clean structure suitable for production deployment:
+This guide provides instructions for deploying the ProFileMatch application to production environments. The application consists of a Django backend and a React frontend that can be deployed separately.
 
-```
-├── backend/
-│   ├── analyzer/           # Core Django app with all business logic
-│   ├── profilematch/       # Django project settings
-│   ├── requirements.txt    # Production dependencies
-│   ├── manage.py           # Django management script
-│   ├── init_production.py  # Production initialization script
-│   └── db.sqlite3          # Local development database (excluded from repo)
-├── frontend/
-│   ├── src/                # React source code
-│   ├── package.json        # Frontend dependencies
-│   ├── vite.config.js      # Vite configuration
-│   └── ...                 # Other frontend configuration files
-├── README.md               # Project documentation
-├── .gitignore              # Git ignore rules
-├── render.yaml             # Render deployment configuration
-├── DEPLOYMENT_CHECKLIST.md # Deployment verification checklist
-└── DEPLOYMENT_SUMMARY.md   # This file
-```
+## Prerequisites
 
-## Key Improvements for Production
+- Python 3.8+
+- Node.js 16+
+- PostgreSQL database
+- API keys for YouTube and Adzuna services
 
-### 1. Security Enhancements
-- Updated Django settings to use environment variables for sensitive data
-- Set `DEBUG = False` by default
-- Configured proper `ALLOWED_HOSTS`
-- Secured database credentials
-- Removed hardcoded secrets
+## Environment Configuration
 
-### 2. Performance Optimizations
-- Added proper static file handling with WhiteNoise
-- Configured Gunicorn for production WSGI server
-- Optimized Vite build configuration with manual chunking
-- Added database connection pooling options
+### Backend Environment Variables
 
-### 3. Deployment Configuration
-- Created `render.yaml` for one-click deployment
-- Added health check endpoint (`/api/health/`)
-- Configured proper CORS settings
-- Set up environment variable management
+Create a `.env` file in the `backend` directory with the following variables:
 
-### 4. Code Cleanup
-- Removed test files and development artifacts
-- Cleaned up resumes directory with sample files
-- Removed database files and cache directories
-- Updated `.gitignore` to exclude unnecessary files
-
-### 5. Documentation
-- Enhanced `README.md` with deployment instructions
-- Created `DEPLOYMENT_CHECKLIST.md` for verification
-- Added clear API documentation
-- Provided troubleshooting guide
-
-## Environment Variables Required
-
-### Backend
-```bash
-SECRET_KEY=your_django_secret_key
+```env
+# Django Settings
+SECRET_KEY=your_secret_key_here
 DEBUG=False
-ALLOWED_HOSTS=your-domain.com,another-domain.com
+ALLOWED_HOSTS=your-backend-domain.com,localhost,127.0.0.1
+
+# CORS Settings
+CORS_ALLOWED_ORIGINS=https://your-frontend-domain.com,http://localhost:5176
+CORS_ALLOW_ALL_ORIGINS=False
+
+# Database Configuration
 DB_NAME=your_database_name
 DB_USER=your_database_user
 DB_PASSWORD=your_database_password
 DB_HOST=your_database_host
 DB_PORT=5432
-YOUTUBE_API_KEY=your_youtube_api_key
+
+# API Keys
 ADZUNA_APP_ID=your_adzuna_app_id
 ADZUNA_APP_KEY=your_adzuna_app_key
+YOUTUBE_API_KEY=your_youtube_api_key
 ```
 
-### Frontend
-```bash
-# Vite automatically loads .env files
-VITE_API_URL=https://your-backend-domain.com/api
+### Frontend Environment Variables
+
+Create a `.env` file in the `frontend` directory with the following variables:
+
+```env
+VITE_API_URL=https://your-backend-domain.com
 ```
 
-## Deployment Commands
+## Local Development Setup
 
-### Local Development
+### Backend
+
 ```bash
-# Backend
 cd backend
 python -m venv venv
 source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 python manage.py migrate
 python manage.py runserver
+```
 
-# Frontend
+### Frontend
+
+```bash
 cd frontend
 npm install
 npm run dev
 ```
 
-### Production Deployment (Render)
-1. Fork repository to GitHub
-2. Create Web Service for backend:
-   - Build: `pip install -r requirements.txt`
-   - Start: `python manage.py migrate && gunicorn profilematch.wsgi:application`
-3. Create Static Site for frontend:
-   - Build: `npm install && npm run build`
-   - Publish directory: `dist`
-4. Create PostgreSQL database
-5. Configure all environment variables
+## Production Deployment
 
-## Health Check Endpoints
-
-- Backend: `GET /api/health/` - Returns JSON with status information
-- Frontend: Root path should load the application
-
-## Monitoring and Maintenance
-
-- Regular database backups recommended
-- Monitor API usage limits (YouTube, Adzuna)
-- Check logs for errors regularly
-- Update dependencies periodically
-- Review security settings annually
-
-## Next Steps
+### Render Deployment
 
 1. Fork this repository to your GitHub account
-2. Follow the deployment checklist in `DEPLOYMENT_CHECKLIST.md`
-3. Test all functionality after deployment
-4. Configure custom domains if needed
-5. Set up monitoring and alerting
+2. Create a new Web Service on Render for the backend:
+   - Connect your GitHub repository
+   - Set Root Directory to: `backend`
+   - Build Command: `pip install -r requirements.txt`
+   - Start Command: `python manage.py migrate && gunicorn profilematch.wsgi:application`
+   - Add all required environment variables
+
+3. Create another Web Service on Render for the frontend:
+   - Connect your GitHub repository
+   - Set Root Directory to: `frontend`
+   - Build Command: `npm install && npm run build`
+   - Set Publish Directory to: `dist`
+   - Add environment variables as needed
+
+### Manual Deployment
+
+#### Backend
+
+```bash
+cd backend
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py collectstatic --noinput
+gunicorn profilematch.wsgi:application
+```
+
+#### Frontend
+
+```bash
+cd frontend
+npm install
+npm run build
+# Serve the dist folder with your preferred web server (nginx, Apache, etc.)
+```
+
+## Database Setup
+
+The application uses PostgreSQL. Ensure you have a PostgreSQL database available and configure the connection details in your environment variables.
+
+For Render deployment, you can use Render's built-in PostgreSQL service or an external database.
+
+## API Keys Configuration
+
+1. **YouTube Data API**:
+   - Go to Google Cloud Console
+   - Enable YouTube Data API v3
+   - Create credentials (API key)
+   - Add to your environment variables
+
+2. **Adzuna API**:
+   - Register at https://developer.adzuna.com/
+   - Get your App ID and App Key
+   - Add to your environment variables
+
+## Troubleshooting
+
+### Common Issues
+
+1. **CORS Errors**: Ensure `CORS_ALLOWED_ORIGINS` includes your frontend domain
+2. **Database Connection**: Verify database credentials and network access
+3. **Missing Environment Variables**: Check that all required variables are set
+4. **Static Files**: Run `collectstatic` for production deployments
+
+### Logs and Monitoring
+
+Check your deployment platform's logs for error messages and monitor application performance.
+
+## Maintenance
+
+- Regularly update dependencies
+- Monitor API usage limits
+- Backup database regularly
+- Review and rotate API keys periodically
+
+## Support
+
+For support or questions, please open an issue on the repository.
