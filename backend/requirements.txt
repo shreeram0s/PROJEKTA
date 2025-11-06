@@ -2,10 +2,7 @@ Django==4.2.7
 djangorestframework==3.14.0
 psycopg2-binary==2.9.7
 django-cors-headers==4.3.1
-https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.0/en_core_web_sm-3.7.0.tar.gz#egg=en_core_web_sm
-https://files.pythonhosted.org/packages/8d/9f/555230b503353b947fb6560886665ef20e2431519260507dc0fb6ef94483/blis-0.7.11-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
-https://files.pythonhosted.org/packages/0f/63/75496768295c9272722c42188d15213890a686eb072d06517a1e09e12a90/thinc-8.1.12-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
-https://files.pythonhosted.org/packages/f0/f0/39e4b472565653304a08af10d1a6e322555890b909014520d0e652bfd7e7/spacy-3.7.2-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+spacy==3.7.2
 scikit-learn==1.3.2
 PyPDF2==3.0.1
 python-docx==0.8.11
