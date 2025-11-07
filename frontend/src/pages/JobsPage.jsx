@@ -10,7 +10,23 @@ import {
   ArrowRight,
   Target,
   Code,
-  Loader2
+  Loader2,
+  Globe,
+  ShoppingCart,
+  Apple,
+  Facebook,
+  Monitor,
+  Zap,
+  Database,
+  Server,
+  Shield,
+  Cloud,
+  User,
+  Building,
+  Users,
+  Factory,
+  Flag,
+  TrendingUp
 } from 'lucide-react';
 import { api } from '../apiClient';
 
